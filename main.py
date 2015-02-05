@@ -1,4 +1,6 @@
 __author__ = 'andrew'
-import SoupMachine
+import Spider
 
-s = SoupMachine.SoupMachine("<html></html>")
+s = Spider.Spider()
+
+s.fetch("http://www.amazon.com/The-Mountain-Three-Short-Sleeve/dp/B002HJ377A")
