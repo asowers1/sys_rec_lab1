@@ -104,14 +104,14 @@ class WebDB(object):
         matching name and itemType in the Item table.
         If there is no match, returns an None.
         """
-        sql = "SELECT id FROM Item WHERE name=%s AND type=%s"\
+        sql = "SELECT id FROM Item WHERE name='%s' AND type='%s'"\
               % (name, itemType)
         res = self.execute(sql)
         reslist = res.fetchall()
         if reslist == []:
             return None
         else:
-            return reslist[0]
+            return reslist[0][0]
 
     def lookupURLToItem(self, urlID, itemID):
         """
@@ -182,7 +182,7 @@ class WebDB(object):
             return item_id
 
         sql = """INSERT INTO Item (name, type)
-                 VALUES ('%s', '%s')""" % (self._quote(name), itemType)
+                 VALUES (\'%s\', \'%s\')""" % (self._quote(name), self._quote(itemType))
 
         res = self.execute(sql)
         return self.cur.lastrowid
@@ -199,7 +199,7 @@ class WebDB(object):
         if u2i_id is not None:
             return u2i_id
 
-        sql = """INSERT INTO Item (urlID, itemID)
+        sql = """INSERT INTO URLToItem (urlID, itemID)
                  VALUES ('%s', '%s')""" % (urlID, itemID)
 
         res = self.execute(sql)
