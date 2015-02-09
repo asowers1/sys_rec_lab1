@@ -2,6 +2,8 @@ __author__ = 'Jordan Smith'
 
 import sqlite3
 import re
+import Spider
+from collections import defaultdict
 
 class WebDB(object):
 
@@ -202,3 +204,39 @@ class WebDB(object):
 
         res = self.execute(sql)
         return self.cur.lastrowid
+
+class Wrapper(object):
+
+    def __init__(self):
+        webDB = WebDB("database.db")
+        spider = Spider.Spider()
+
+    def createCleanFile(self, list, id):
+        filename = self.getFileNameFromID(id)
+        fo = open(("data/clean/" + filename), "w+")
+
+        if (type(dict) == type(defaultdict())):
+            for key, value in dict.items():
+                fo.write(str(key) + "\n")
+        fo.close()
+
+    def createRawFile(self, input, id):
+        filename = self.getFileNameFromID(id)
+        fo = open(("data/raw/" + filename), "w+")
+
+        fo.write(input)
+        fo.close()
+
+    def createHeaderFile(self, input, id):
+        filename = self.getFileNameFromID(id)
+        fo = open(("data/header/" + filename), "w+")
+
+        fo.write(input)
+        fo.close()
+
+    def getFileNameFromID(self, id):
+        filename = "" + str(id)
+        while (len(filename) <= 6):
+            filename = "0" + filename
+
+        return filename + ".txt"
