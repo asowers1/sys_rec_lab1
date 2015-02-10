@@ -26,9 +26,12 @@ class Spider():
         if id is not None:
             return id
 
-        html = self.htmlGetter.getHTMLFromURL(url)
+        html = self.htmlGetter.getHTMLFromURL2(url)
         self.soupMachine = SoupMachine.SoupMachine(html)
         title = self.soupMachine.getTitle()
+
+        header = self.htmlGetter.getHeader()
+
 
         id = self.database.insertCachedURL(url, doctype, title)
 
