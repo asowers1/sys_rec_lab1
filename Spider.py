@@ -8,6 +8,8 @@ import nltk.data
 import re
 from nltk.stem import *
 import Database
+import time
+import random
 
 class Spider():
     html        = None
@@ -26,12 +28,14 @@ class Spider():
         if id is not None:
             return id
 
+        time.sleep(random.uniform(.3, 3))
         html = self.htmlGetter.getHTMLFromURL2(url)
         self.soupMachine = SoupMachine.SoupMachine(html)
         title = self.soupMachine.getTitle()
 
+        title = title.replace("'", "")
         header = self.htmlGetter.getHeader()
-
+        htmlPageString = self.soupMachine.getText()
 
         id = self.database.insertCachedURL(url, doctype, title)
 
@@ -45,6 +49,9 @@ class Spider():
         databaseWrapper = Database.Wrapper()
 
         databaseWrapper.createCleanFile(tokens, id)
+        databaseWrapper.createRawFile(htmlPageString, id)
+        databaseWrapper.createHeaderFile(header, id)
+        return id
 
     def removeComments(self, string):
         string = re.sub(re.compile("/\*.*?\*/",re.DOTALL ) ,"" ,string) # remove all occurance streamed comments (/*COMMENT */) from string

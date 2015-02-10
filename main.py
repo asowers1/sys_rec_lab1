@@ -1,7 +1,6 @@
 __author__ = 'andrew'
 import Spider
 from google import search
-import time, random
 
 
 #
@@ -27,10 +26,9 @@ for song in songs:
 print(songList)
 bookSpider = Spider.Spider()
 for item in bookList:
-    for url in search(item + " book", tld='es', lang='es', stop=10):
-        time.sleep(random.uniform(.3, 3))
+    for url in search(item + " book", stop=10):
         if(type(url) is str):
-            bookSpider.fetch(url, "book")
+            print(bookSpider.fetch(url, "book"))
 
 #for item in movieList:
 #    for url in search(item + " movie", tld='es', lang='es', stop=10):

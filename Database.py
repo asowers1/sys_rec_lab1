@@ -58,6 +58,7 @@ class WebDB(object):
         """
         Execute an arbitrary SQL command on the underlying database.
         """
+        print(sql)
         res = self.cur.execute(sql)
         self.cxn.commit()
 

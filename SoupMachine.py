@@ -8,7 +8,11 @@ class SoupMachine():
     def __init__(self, html_doc):
         self.soup = BeautifulSoup(html_doc)
     def getTitle(self):
-       return str(self.soup.html.head.title.string)
+       try:
+           return str(self.soup.html.head.title.string)
+       except Exception as e:
+           return str("No Title")
+
     def getTitleName(self):
         return self.soup.title.name
     def getAllText(self):
