@@ -35,7 +35,7 @@ class Spider():
 
         title = title.replace("'", "")
         header = self.htmlGetter.getHeader()
-        htmlPageString = self.soupMachine.getText()
+        htmlPageString = str(html)
 
         id = self.database.insertCachedURL(url, doctype, title)
 
