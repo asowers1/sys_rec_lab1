@@ -24,6 +24,8 @@ songList = []
 for song in songs:
     songList.append(song.rstrip())
 print(songList)
+
+
 spider = Spider.Spider()
 for item in bookList:
     for url in search(item + " book"):
