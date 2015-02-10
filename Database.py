@@ -207,11 +207,7 @@ class WebDB(object):
 
 class Wrapper(object):
 
-    def __init__(self):
-        webDB = WebDB("database.db")
-        spider = Spider.Spider()
-
-    def createCleanFile(self, list, id):
+    def createCleanFile(self, dict, id):
         filename = self.getFileNameFromID(id)
         fo = open(("data/clean/" + filename), "w+")
 

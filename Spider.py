@@ -7,40 +7,41 @@ import nltk
 import nltk.data
 import re
 from nltk.stem import *
+import Database
 
 class Spider():
     html        = None
     soupMachine = None
     mlStriper   = None
     htmlGetter  = None
+    database    = None
 
     def __init__(self):
         self.htmlGetter = HTMLGetter.HTMLGetter()
+        self.database = Database.WebDB("data/cache/database.db")
 
 
-    def fetch(self, url):
+    def fetch(self, url, doctype):
+        id = self.database.lookupCachedURL_byURL(url)
+        if id is not None:
+            return id
+
         html = self.htmlGetter.getHTMLFromURL(url)
         self.soupMachine = SoupMachine.SoupMachine(html)
         title = self.soupMachine.getTitle()
-        print("Title of Page: " + title)
+
+        id = self.database.insertCachedURL(url, doctype, title)
+
+        #Finish tokenization
         self.soupMachine.removeJunk()
-
         strippedhtml = self.removePunc(self.removeComments(self.removeHtmlComments(self.soupMachine.getText())))
-        tokens = nltk.word_tokenize(strippedhtml)
+        lowercaseTokenList = self.removeUpperFromObject(nltk.word_tokenize(strippedhtml))
+        tokens = self.convertListToDictionary(lowercaseTokenList)
 
-        print("Number of Tokens: " + str(len(tokens)))
-        terms = self.convertListToDictionary(tokens)
-        print("Number of Terms: " + str(len(terms)))
-        #Lowercase all terms
-        self.removeUpperFromObject(tokens)
-        lowerTerms = self.convertListToDictionary(tokens)
-        print('Number of Terms after lowercase: ' + str(len(lowerTerms)))
-        porterTerms = self.convertToPorterTerms(lowerTerms)
-        print('Number of Terms after Porter Stemmer: ' + str(len(set(porterTerms))))
+        #Create all text files.
+        databaseWrapper = Database.Wrapper()
 
-
-
-
+        databaseWrapper.createCleanFile(tokens, id)
 
     def removeComments(self, string):
         string = re.sub(re.compile("/\*.*?\*/",re.DOTALL ) ,"" ,string) # remove all occurance streamed comments (/*COMMENT */) from string
@@ -58,6 +59,8 @@ class Spider():
     def removeUpperFromObject(self, objects):
         for i in range(len(objects)):
             objects[i] = objects[i].lower()
+
+        return objects
 
     def convertListToDictionary(self, list):
         dictionary = defaultdict(int)
