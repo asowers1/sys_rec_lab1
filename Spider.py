@@ -29,19 +29,18 @@ class Spider():
         tokens = nltk.word_tokenize(strippedhtml)
 
         print("Number of Tokens: " + str(len(tokens)))
-
         terms = self.convertListToDictionary(tokens)
         print("Number of Terms: " + str(len(terms)))
-
         #Lowercase all terms
         self.removeUpperFromObject(tokens)
-
         lowerTerms = self.convertListToDictionary(tokens)
-
         print('Number of Terms after lowercase: ' + str(len(lowerTerms)))
-
         porterTerms = self.convertToPorterTerms(lowerTerms)
         print('Number of Terms after Porter Stemmer: ' + str(len(set(porterTerms))))
+
+
+
+
 
     def removeComments(self, string):
         string = re.sub(re.compile("/\*.*?\*/",re.DOTALL ) ,"" ,string) # remove all occurance streamed comments (/*COMMENT */) from string
