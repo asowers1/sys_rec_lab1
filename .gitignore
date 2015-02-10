@@ -1,0 +1,10 @@
+bin/
+build/
+
+.DS_Store
+.idea
+
+.idea/workspace.xml
+__pycache__/
+
+.idea/
